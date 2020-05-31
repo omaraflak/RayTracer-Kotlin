@@ -3,16 +3,25 @@ package scene
 import geometry.Point3F
 
 class Camera(
-    val position: Point3F,
-    lookAt: Point3F,
-    planeNormal: Point3F,
-    distanceToScreen: Float = 1f,
-    width: Int,
-    height: Int
+    position: Point3F,
+    private val lookAt: Point3F,
+    private val planeNormal: Point3F,
+    private val distanceToScreen: Float = 1f,
+    private val width: Int,
+    private val height: Int
 ) {
-    val screen: Screen
+    lateinit var screen: Screen
+    var position = position
+    set(value) {
+        field = value
+        updateScreen()
+    }
 
     init {
+        updateScreen()
+    }
+
+    private fun updateScreen() {
         val diff = lookAt - position
         val tmp = diff.cross(planeNormal)
 
