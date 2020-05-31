@@ -70,20 +70,8 @@ class Scene(
     }
 
     fun renderToFile(filepath: String, onProgress: ((Int) -> Unit)? = null) {
-        val screen = camera.screen
         val image = render(onProgress)
-        val buffer = BufferedImage(screen.width, screen.height, BufferedImage.TYPE_3BYTE_BGR)
-
-        image.forEachIndexed { y, list ->
-            list.forEachIndexed { x, p ->
-                val red = (p.x * 255).toInt()
-                val green = (p.y * 255).toInt()
-                val blue = (p.z * 255).toInt()
-                val color = (red shl 16) or (green shl 8) or blue
-                buffer.setRGB(x, y, color)
-            }
-        }
-
+        val buffer = toBufferedImage(image)
         val file = File(filepath)
         ImageIO.write(buffer, "png", file)
     }
