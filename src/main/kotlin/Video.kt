@@ -2,7 +2,6 @@ import geometry.Point3F
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import scene.Scene
-import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 import kotlin.math.PI
@@ -10,7 +9,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 fun main() {
-    createAnimation("output/anim5/images") { current, total ->
+    createAnimation("output/anim/images") { current, total ->
         println("$current/$total")
     }
 }
@@ -20,8 +19,10 @@ fun createAnimation(folder: String, onProgress: ((Int, Int) -> Unit)? = null) {
 
     Observable.range(0, 360)
         .flatMap {
+            val scene = createScene()
+            scene.camera.position.apply { set(rotateY(it.toFloat())) }
             Observable.fromCallable {
-                Pair(it, renderForRotation(it.toFloat()))
+                Pair(it, Scene.toBufferedImage(scene.render()))
             }.subscribeOn(Schedulers.computation())
         }
         .observeOn(Schedulers.io())
@@ -32,12 +33,6 @@ fun createAnimation(folder: String, onProgress: ((Int, Int) -> Unit)? = null) {
         }
 }
 
-fun renderForRotation(angle: Float): BufferedImage {
-    val scene = createScene()
-    scene.camera.position.set(scene.camera.position.rotateY(angle))
-    return Scene.toBufferedImage(scene.render())
-}
-
 fun Point3F.rotateY(angle: Float): Point3F {
     val rad = (angle * PI / 180).toFloat()
     return Point3F(
@@ -46,3 +41,4 @@ fun Point3F.rotateY(angle: Float): Point3F {
         sin(rad) * x + cos(rad) * z
     )
 }
+
