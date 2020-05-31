@@ -9,7 +9,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 fun main() {
-    createAnimation("output/anim/images") { current, total ->
+    createAnimation("output/animation/images") { current, total ->
         println("$current/$total")
     }
 }
@@ -20,7 +20,7 @@ fun createAnimation(folder: String, onProgress: ((Int, Int) -> Unit)? = null) {
     Observable.range(0, 360)
         .flatMap {
             val scene = createScene()
-            scene.camera.position.apply { set(rotateY(it.toFloat())) }
+            scene.camera.position = scene.camera.position.rotateY(it.toFloat())
             Observable.fromCallable {
                 Pair(it, Scene.toBufferedImage(scene.render()))
             }.subscribeOn(Schedulers.computation())

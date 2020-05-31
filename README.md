@@ -23,3 +23,16 @@ Scene(
 ```
 
 ![image](output/images/screenshot.png)
+
+# Build Animation
+
+1- Create output directories
+
+```
+mkdir -p output/animation/images
+mkdir -p output/animation/videos
+```
+
+2- Execute `Video.kt`
+
+3- Mux images (`ffmpeg` required): `make anim=animation`
