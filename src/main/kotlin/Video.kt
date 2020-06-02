@@ -33,6 +33,11 @@ fun createAnimation(folder: String, onProgress: ((Int, Int) -> Unit)? = null) {
         }
 }
 
+fun Point3F.rotateY(angle: Float, around: Point3F = Point3F.origin()): Point3F {
+    around.y = 0f
+    return (this - around).rotateY(angle) + around
+}
+
 fun Point3F.rotateY(angle: Float): Point3F {
     val rad = (angle * PI / 180).toFloat()
     return Point3F(
@@ -41,4 +46,3 @@ fun Point3F.rotateY(angle: Float): Point3F {
         sin(rad) * x + cos(rad) * z
     )
 }
-

@@ -35,6 +35,6 @@ mkdir -p output/animation/videos
 
 2- Execute `Video.kt`
 
-3- Mux images (`ffmpeg` required): `make anim=animation`
+3- Mux images (`ffmpeg` required): `make out=animation`
 
 [![Watch the video](https://img.youtube.com/vi/klVCeTXNX2M/hqdefault.jpg)](https://youtu.be/klVCeTXNX2M)
