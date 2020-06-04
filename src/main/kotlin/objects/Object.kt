@@ -20,9 +20,11 @@ open class Object(private val material: Material) {
         var color = Point3F()
 
         scene.lights.forEach { light ->
-            val toLightUnit = (light.position - intersection).normalized()
-            if (!scene.objects.any { it.intersect(intersection, toLightUnit) != null }) {
-                color += material.getColor(intersection, normalToSurface, toLightUnit, toCameraUnit, light)
+            light.pointsVisibleTo(intersection).forEach { lightPoint ->
+                val toLightUnit = (lightPoint - intersection).normalized()
+                if (!scene.objects.any { it.intersect(intersection, toLightUnit) != null }) {
+                    color += material.getColor(intersection, normalToSurface, toLightUnit, toCameraUnit, light)
+                }
             }
         }
 

@@ -1,6 +1,6 @@
 package geometry
 
-import kotlin.math.sqrt
+import kotlin.math.*
 
 class Point3F(var x: Float = 0f, var y: Float = 0f, var z: Float = 0f) {
     constructor(p: Point3F) : this() {
@@ -59,8 +59,15 @@ class Point3F(var x: Float = 0f, var y: Float = 0f, var z: Float = 0f) {
          return this * (1f / length())
     }
 
-    fun copy(): Point3F {
-        return Point3F(this)
+    fun rotate(angle: Float, axis: Point3F): Point3F {
+        val r = angle * PI / 180
+        val cosR = cos(r)
+        val sinR = sin(r)
+        return Point3F(
+            ((cosR + axis.x.pow(2) * (1 - cosR)) * x + (axis.x * axis.y * (1 - cosR) - axis.z * sinR) * y + (axis.x * axis.z * (1 - cosR) + axis.y * sinR) * z).toFloat(),
+            ((axis.y * axis.x * (1 - cosR) + axis.z * sinR) * x + (cosR + axis.y.pow(2) * (1 - cosR)) * y + (axis.y * axis.z * (1 - cosR) - axis.x * sinR) * z).toFloat(),
+            ((axis.z * axis.x * (1 - cosR) - axis.y * sinR) * x + (axis.z * axis.y * (1 - cosR) + axis.x * sinR) * y + (cosR + axis.z.pow(2) * (1 - cosR)) * z).toFloat()
+        )
     }
 
     override fun toString(): String {

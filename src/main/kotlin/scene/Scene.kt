@@ -3,6 +3,7 @@ package scene
 import geometry.Point3F
 import geometry.times
 import objects.Object
+import scene.lights.Light
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO

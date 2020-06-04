@@ -4,8 +4,9 @@ import materials.UniformMaterial
 import objects.Plane
 import objects.Sphere
 import scene.Camera
-import scene.Light
 import scene.Scene
+import scene.lights.LightCircle
+import scene.lights.LightPoint
 
 fun main() {
     createScene().renderToFile("output/images/${System.currentTimeMillis()}.png") {
@@ -19,12 +20,12 @@ fun createScene(): Scene {
             position = Point3F(-1f, 1f, 1f),
             lookAt = Point3F(0f, 0.3f, -1f),
             planeNormal = Point3F.yUnit(),
-            width = 1920,
-            height = 1080
+            width = 1280,
+            height = 720
         ),
         lights = listOf(
-            Light(position = Point3F(5f, 5f, 10f)),
-            Light(position = Point3F(-5f, 5f, -1.5f))
+            LightCircle(center = Point3F(20f, 20f, 20f), radius = 25f, towards = Point3F.origin())
+//            LightPoint(Point3F(-5f, 5f, -1.5f))
         ),
         objects = listOf(
             Sphere(Point3F(0.6f, 0.35f, -0.6f), 0.35f, UniformMaterial(Point3F(0.5f, 0f, 0.5f))),

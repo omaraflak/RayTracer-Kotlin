@@ -1,7 +1,7 @@
 package materials
 
 import geometry.Point3F
-import scene.Light
+import scene.lights.Light
 import kotlin.math.max
 import kotlin.math.pow
 
