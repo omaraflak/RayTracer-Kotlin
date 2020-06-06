@@ -44,14 +44,16 @@ class Scene(
                         }
                     }
 
-                    if (minIndex != null) {
-                        color += reflection * objects[minIndex!!].getLightColor(origin, ray, minDistance, this)
+                    minIndex?.let {
+                        color += reflection * objects[it].getLightColor(origin, ray, minDistance, this)
                         val intersection = origin + minDistance * ray
-                        val normal = objects[minIndex!!].getNormalVectorSurface(intersection)
+                        val normal = objects[it].getNormalVectorSurface(intersection)
                         origin.set(intersection + 1e-3f * normal)
-                        ray.set(-ray.reflection(normal))
-                        reflection *= 0.5f
-                    } else {
+                        ray.set(ray.reflection(normal))
+                        reflection *= objects[it].material.getReflectivity(intersection)
+                    }
+
+                    if (minIndex == null) {
                         break
                     }
                 }
@@ -64,7 +66,7 @@ class Scene(
 
                 image[i][j].set(color)
             }
-            onProgress?.invoke(i * 100 / screen.height)
+            onProgress?.invoke((i + 1) * 100 / screen.height)
         }
 
         return image

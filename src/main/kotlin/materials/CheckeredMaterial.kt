@@ -19,7 +19,7 @@ class CheckeredMaterial(
         v.set(u.cross(spaceNormal).normalized())
     }
 
-    override fun getColor(point: Point3F, normal: Point3F, toLight: Point3F, toCamera: Point3F, light: Light): Point3F {
+    private fun getMaterialOnSurface(point: Point3F): UniformMaterial {
         val projected = point - (point - this.spaceNormal).dot(this.spaceNormal) * this.spaceNormal
         val distance = (point - projected).length()
         projected.set(projected + distance * u)
@@ -32,8 +32,16 @@ class CheckeredMaterial(
         val j = (b / squareSize).run { if (this < 0) this - 1 else this }.toInt()
 
         if ((i + j % 2) % 2 == 0) {
-            return uniformMaterial1.getColor(point, normal, toLight, toCamera, light)
+            return uniformMaterial1
         }
-        return uniformMaterial2.getColor(point, normal, toLight, toCamera, light)
+        return uniformMaterial2
+    }
+
+    override fun getColor(point: Point3F, normal: Point3F, toLight: Point3F, toCamera: Point3F, light: Light): Point3F {
+        return getMaterialOnSurface(point).getColor(point, normal, toLight, toCamera, light)
+    }
+
+    override fun getReflectivity(point: Point3F): Float {
+        return getMaterialOnSurface(point).getReflectivity(point)
     }
 }

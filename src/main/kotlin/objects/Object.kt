@@ -4,7 +4,7 @@ import geometry.Point3F
 import materials.Material
 import scene.Scene
 
-open class Object(val position: Point3F, private val material: Material) {
+open class Object(val position: Point3F, val material: Material) {
     open fun intersect(origin: Point3F, direction: Point3F): Float? {
         throw NotImplementedError()
     }
