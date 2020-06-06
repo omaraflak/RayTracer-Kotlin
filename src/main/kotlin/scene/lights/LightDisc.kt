@@ -2,13 +2,14 @@ package scene.lights
 
 import geometry.Point3F
 
-class LightCircle(
+class LightDisc(
     val center: Point3F,
     radius: Float,
     towards: Point3F,
-    intensity: Float = 2f,
-    ambient: Float = 0.01f
-): Light(center, intensity, ambient) {
+    diffuseIntensity: Point3F = Point3F.ones() * 2f,
+    ambientIntensity: Point3F = Point3F.ones() * 0.4f,
+    specularIntensity: Point3F = Point3F.ones()
+): Light(center, diffuseIntensity, ambientIntensity, specularIntensity) {
     private val positions = mutableListOf(center)
 
     init {
@@ -19,7 +20,9 @@ class LightCircle(
                 positions.add(center + orthogonal.rotate(j.toFloat(), normal) * (i / 100f) * radius)
             }
         }
-        this.intensity /= positions.size
+        diffuseIntensity.set(diffuseIntensity * (1f / positions.size))
+        ambientIntensity.set(ambientIntensity * (1f / positions.size))
+        specularIntensity.set(specularIntensity * (1f / positions.size))
     }
 
     override fun pointsVisibleTo(point: Point3F): List<Point3F> {

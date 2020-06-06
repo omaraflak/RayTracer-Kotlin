@@ -4,23 +4,25 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import scene.Scene
 import java.io.File
 import javax.imageio.ImageIO
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
 
 fun main() {
-    createAnimation("output/animation/images") { current, total ->
-        println("$current/$total")
+    "output/animation".also {
+        File(it).mkdirs()
+        createAnimation(it) { current, total ->
+            println("$current/$total")
+        }
     }
 }
 
 fun createAnimation(folder: String, onProgress: ((Int, Int) -> Unit)? = null) {
     var processed = 0
+    val origin = Point3F(0.6f, 0.35f, -0.6f)
+    val axis = Point3F.yUnit()
 
     Observable.range(0, 360)
         .flatMap {
             val scene = createScene()
-            scene.camera.position = scene.camera.position.rotateY(it.toFloat())
+            scene.camera.updatePosition(scene.camera.position.rotate(it.toFloat() / 2, axis, origin))
             Observable.fromCallable {
                 Pair(it, Scene.toBufferedImage(scene.render()))
             }.subscribeOn(Schedulers.computation())
@@ -31,18 +33,4 @@ fun createAnimation(folder: String, onProgress: ((Int, Int) -> Unit)? = null) {
             ImageIO.write(it.second, "png", file)
             onProgress?.invoke(++processed, 360)
         }
-}
-
-fun Point3F.rotateY(angle: Float, around: Point3F = Point3F.origin()): Point3F {
-    around.y = 0f
-    return (this - around).rotateY(angle) + around
-}
-
-fun Point3F.rotateY(angle: Float): Point3F {
-    val rad = (angle * PI / 180).toFloat()
-    return Point3F(
-        cos(rad) * x - sin(rad) * z,
-        y,
-        sin(rad) * x + cos(rad) * z
-    )
 }

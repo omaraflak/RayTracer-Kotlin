@@ -8,7 +8,7 @@ class Plane(
     private val point: Point3F,
     private val normal: Point3F,
     material: Material
-): Object(material) {
+): Object(point, material) {
     override fun getNormalVectorSurface(point: Point3F): Point3F {
         return normal
     }

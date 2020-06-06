@@ -3,7 +3,7 @@ package scene
 import geometry.Point3F
 
 class Camera(
-    position: Point3F,
+    val position: Point3F,
     private val lookAt: Point3F,
     private val planeNormal: Point3F,
     private val distanceToScreen: Float = 1f,
@@ -11,13 +11,13 @@ class Camera(
     private val height: Int
 ) {
     lateinit var screen: Screen
-    var position = position
-    set(value) {
-        field = value
+
+    init {
         updateScreen()
     }
 
-    init {
+    fun updatePosition(newPosition: Point3F) {
+        position.set(newPosition)
         updateScreen()
     }
 

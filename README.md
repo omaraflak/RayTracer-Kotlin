@@ -6,12 +6,11 @@ Scene(
         position = Point3F(-1f, 1f, 1f),
         lookAt = Point3F(0f, 0.3f, -1f),
         planeNormal = Point3F.yUnit(),
-        width = 1920,
-        height = 1080
+        width = 2560,
+        height = 1440
     ),
     lights = listOf(
-        Light(position = Point3F(5f, 5f, 10f)),
-        Light(position = Point3F(-5f, 5f, -1.5f))
+        LightDisc(center = Point3F(10f, 10f, 10f), radius = 5f, towards = Point3F.origin())
     ),
     objects = listOf(
         Sphere(Point3F(0.6f, 0.35f, -0.6f), 0.35f, UniformMaterial(Point3F(0.5f, 0f, 0.5f))),
@@ -26,15 +25,8 @@ Scene(
 
 # Build Animation
 
-1- Create output directories
+1- Execute `Video.kt`
 
-```
-mkdir -p output/animation/images
-mkdir -p output/animation/videos
-```
-
-2- Execute `Video.kt`
-
-3- Mux images (`ffmpeg` required): `make out=animation`
+2- Mux images (`ffmpeg` required): `make in=output/animation`
 
 [![Watch the video](https://img.youtube.com/vi/klVCeTXNX2M/hqdefault.jpg)](https://youtu.be/klVCeTXNX2M)

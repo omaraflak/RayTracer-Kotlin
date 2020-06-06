@@ -31,6 +31,10 @@ class Point3F(var x: Float = 0f, var y: Float = 0f, var z: Float = 0f) {
         return this + (-p)
     }
 
+    operator fun times(p: Point3F): Point3F {
+        return Point3F(x * p.x, y * p.y, z * p.z)
+    }
+
     operator fun times(f: Float): Point3F {
         return Point3F(x * f, y * f, z * f)
     }
@@ -68,6 +72,10 @@ class Point3F(var x: Float = 0f, var y: Float = 0f, var z: Float = 0f) {
             ((axis.y * axis.x * (1 - cosR) + axis.z * sinR) * x + (cosR + axis.y.pow(2) * (1 - cosR)) * y + (axis.y * axis.z * (1 - cosR) - axis.x * sinR) * z).toFloat(),
             ((axis.z * axis.x * (1 - cosR) - axis.y * sinR) * x + (axis.z * axis.y * (1 - cosR) + axis.x * sinR) * y + (cosR + axis.z.pow(2) * (1 - cosR)) * z).toFloat()
         )
+    }
+
+    fun rotate(angle: Float, axis: Point3F, origin: Point3F = origin()): Point3F {
+        return (this - origin).rotate(angle, axis) + origin
     }
 
     override fun toString(): String {

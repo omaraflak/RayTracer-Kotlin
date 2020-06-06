@@ -7,7 +7,7 @@ import kotlin.math.pow
 
 class UniformMaterial(
     private val diffuse: Point3F,
-    private val ambient: Point3F = Point3F.ones() * 0.1f,
+    private val ambient: Point3F = diffuse * 0.1f,
     private val specular: Point3F = Point3F.ones(),
     private val shininess: Float = 100f
 ): Material {
@@ -18,13 +18,13 @@ class UniformMaterial(
             return color
 
         // ambient
-        color += ambient * light.ambient
+        color += ambient * light.ambientIntensity
 
         // diffuse
-        color += diffuse * light.intensity * max(0f, diffuseFactor)
+        color += diffuse * light.diffuseIntensity * max(0f, diffuseFactor)
 
         // specular
-        color += specular * light.intensity * max(0f, (toCamera + toLight).normalized().dot(normal).pow(shininess / 4f))
+        color += specular * light.specularIntensity * max(0f, (toCamera + toLight).normalized().dot(normal).pow(shininess / 4f))
         return color
     }
 }

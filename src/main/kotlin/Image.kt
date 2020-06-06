@@ -5,7 +5,6 @@ import objects.Plane
 import objects.Sphere
 import scene.Camera
 import scene.Scene
-import scene.lights.LightCircle
 import scene.lights.LightPoint
 
 fun main() {
@@ -24,8 +23,8 @@ fun createScene(): Scene {
             height = 720
         ),
         lights = listOf(
-            LightCircle(center = Point3F(20f, 20f, 20f), radius = 25f, towards = Point3F.origin())
-//            LightPoint(Point3F(-5f, 5f, -1.5f))
+            LightPoint(Point3F(-5f, 5f, -1.5f)),
+            LightPoint(Point3F(5f, 5f, 5f), diffuseIntensity = Point3F.ones() * 0.5f)
         ),
         objects = listOf(
             Sphere(Point3F(0.6f, 0.35f, -0.6f), 0.35f, UniformMaterial(Point3F(0.5f, 0f, 0.5f))),

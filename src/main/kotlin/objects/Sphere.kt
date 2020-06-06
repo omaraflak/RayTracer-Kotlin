@@ -11,7 +11,7 @@ class Sphere(
     private val center: Point3F,
     private val radius: Float,
     material: Material
-): Object(material) {
+): Object(center, material) {
     override fun getNormalVectorSurface(point: Point3F): Point3F {
         return (point - center).normalized()
     }
