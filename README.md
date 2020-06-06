@@ -21,7 +21,7 @@ Scene(
 ).renderToFile("output/images/${System.currentTimeMillis()}.png")
 ```
 
-![image](output/images/screenshot.png)
+![image](art/screenshot.png)
 
 # Build Animation
 

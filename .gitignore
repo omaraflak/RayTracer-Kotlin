@@ -1,6 +1,4 @@
-output/anim*
-output/images
-
+output/*
 .DS_Store
 .idea/shelf
 /confluence/target
