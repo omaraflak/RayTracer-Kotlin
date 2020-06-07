@@ -6,8 +6,8 @@ class LightDisc(
     val center: Point3F,
     radius: Float,
     towards: Point3F,
-    diffuseIntensity: Point3F = Point3F.ones() * 2f,
-    ambientIntensity: Point3F = Point3F.ones() * 0.4f,
+    diffuseIntensity: Point3F = Point3F(2f),
+    ambientIntensity: Point3F = Point3F(0.4f),
     specularIntensity: Point3F = Point3F.ones()
 ): Light(center, diffuseIntensity, ambientIntensity, specularIntensity) {
     private val positions = mutableListOf(center)

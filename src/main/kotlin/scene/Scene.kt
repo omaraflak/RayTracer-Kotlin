@@ -24,52 +24,50 @@ class Scene(
         val xVector = (screen.topRight - screen.topLeft) * (1f / screen.width)
         val yVector = (screen.bottomLeft - screen.topLeft) * (1f / screen.height)
 
-        for (i in 0 until screen.height) {
-            for (j in 0 until screen.width) {
-                var color = Point3F()
-                val pixel = screen.topLeft + xVector * j.toFloat() + yVector * i.toFloat()
-                val ray = (pixel - camera.position).normalized()
+        for (y in 0 until screen.height) {
+            for (x in 0 until screen.width) {
+                val pixel = screen.topLeft + xVector * x.toFloat() + yVector * y.toFloat()
+                val direction = (pixel - camera.position).normalized()
                 val origin = Point3F(camera.position)
-                var reflection = 1f
-
-                for (depth in 0..3) {
-                    var minIndex: Int? = null
-                    var minDistance = Float.MAX_VALUE
-                    objects.forEachIndexed { index, obj ->
-                        obj.intersect(origin, ray)?.let {
-                            if (it < minDistance) {
-                                minDistance = it
-                                minIndex = index
-                            }
-                        }
-                    }
-
-                    minIndex?.let {
-                        color += reflection * objects[it].getLightColor(origin, ray, minDistance, this)
-                        val intersection = origin + minDistance * ray
-                        val normal = objects[it].getNormalVectorSurface(intersection)
-                        origin.set(intersection + 1e-3f * normal)
-                        ray.set(ray.reflection(normal))
-                        reflection *= objects[it].material.getReflectivity(intersection)
-                    }
-
-                    if (minIndex == null) {
-                        break
-                    }
-                }
-
-                color.apply {
-                    x = x.coerceIn(0f, 1f)
-                    y = y.coerceIn(0f, 1f)
-                    z = z.coerceIn(0f, 1f)
-                }
-
-                image[i][j].set(color)
+                image[y][x].set(traceRay(origin, direction))
             }
-            onProgress?.invoke((i + 1) * 100 / screen.height)
+            onProgress?.invoke((y + 1) * 100 / screen.height)
         }
 
         return image
+    }
+
+    private fun traceRay(origin: Point3F, direction: Point3F, maxDepth: Int = 3): Point3F {
+        val color = Point3F()
+        var reflection = 1f
+
+        for (k in 0..maxDepth) {
+            var nearestObject: Object? = null
+            var minDistance = Float.MAX_VALUE
+            objects.forEach { obj ->
+                obj.intersect(origin, direction)?.let {
+                    if (it < minDistance) {
+                        minDistance = it
+                        nearestObject = obj
+                    }
+                }
+            }
+
+            nearestObject?.let {
+                val intersection = origin + minDistance * direction
+                val normal = it.getNormalVectorSurface(intersection)
+                color.set(color + reflection * it.getLightColor(origin, direction, minDistance, this))
+                origin.set(intersection + 1e-3f * normal)
+                direction.set(direction.reflection(normal))
+                reflection *= it.material.getReflectivity(intersection)
+            } ?: break
+        }
+
+        return color.apply {
+            x = x.coerceIn(0f, 1f)
+            y = y.coerceIn(0f, 1f)
+            z = z.coerceIn(0f, 1f)
+        }
     }
 
     fun renderToFile(filepath: String, onProgress: ((Int) -> Unit)? = null) {

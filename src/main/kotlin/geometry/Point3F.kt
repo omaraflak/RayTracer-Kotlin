@@ -7,6 +7,10 @@ class Point3F(var x: Float = 0f, var y: Float = 0f, var z: Float = 0f) {
         set(p)
     }
 
+    constructor(n: Float) : this() {
+        set(n, n, n)
+    }
+
     fun set(p: Point3F) {
         x = p.x
         y = p.y

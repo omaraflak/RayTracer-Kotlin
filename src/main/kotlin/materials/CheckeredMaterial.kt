@@ -6,7 +6,7 @@ import scene.lights.Light
 
 class CheckeredMaterial(
     private val uniformMaterial1: UniformMaterial = UniformMaterial(Point3F()),
-    private val uniformMaterial2: UniformMaterial = UniformMaterial(Point3F.ones() * 0.6f),
+    private val uniformMaterial2: UniformMaterial = UniformMaterial(Point3F(0.6f)),
     private val spaceNormal: Point3F = Point3F(0f, 1f, 0f),
     private val squareSize: Float = 0.2f
 ): Material {
