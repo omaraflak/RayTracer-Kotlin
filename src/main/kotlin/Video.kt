@@ -22,7 +22,7 @@ fun createAnimation(folder: String, onProgress: ((Int, Int) -> Unit)? = null) {
     Observable.range(0, 360)
         .flatMap {
             val scene = createScene()
-            scene.camera.updatePosition(scene.camera.position.rotate(it.toFloat() / 2, axis, origin))
+            scene.camera.updatePosition(scene.camera.position.rotate(it.toFloat(), axis, origin))
             Observable.fromCallable {
                 Pair(it, Scene.toBufferedImage(scene.render()))
             }.subscribeOn(Schedulers.computation())
